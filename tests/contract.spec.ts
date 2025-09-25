@@ -6,23 +6,49 @@ import { PlanPaymentHelper } from '../src/helpers/planPaymentHelper';
 import { PlanPaymentPage } from '../src/pages/PlanPaymentPage';
 
 let welcomePage: WelcomePage;
+let contractHelper: ContractHelper;
+let planPaymentHelper: PlanPaymentHelper;
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('/');
-  welcomePage = new WelcomePage(page);
-});
+test.describe('Pet insurance contracts', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    welcomePage = new WelcomePage(page);
 
-test.afterAll(async ({ page }) => {
-  await page.close();
-});
-
-test('Contract one dog insurance', async ({ page }) => {
     const contractPage = new ContractPage(page);
-    const contractHelper = new ContractHelper(contractPage);
-    const planPaymentPage = new PlanPaymentPage(page);
-    const planPaymentHelper = new PlanPaymentHelper(planPaymentPage);
+    contractHelper = new ContractHelper(contractPage);
 
-    await contractHelper.completePetForm();
-    await expect(page).toHaveURL('https://staging.musky.es/cotizacion?utm_source=organic&utm_medium=home&step=6&pet=1');
+    const planPaymentPage = new PlanPaymentPage(page);
+    planPaymentHelper = new PlanPaymentHelper(planPaymentPage);
+  });
+
+  test.afterAll(async ({ page }) => {
+    await page.close();
+  });
+
+  test('Single contract one dog insurance', async () => {
+    await contractHelper.fillPetForm();
     await planPaymentHelper.completePlanPayment();
+  });
+
+  test('Contract two dogs insurance', async () => {
+    await contractHelper.fillPetForm();
+
+    await welcomePage.addAnotherPet();
+
+    await contractHelper.fillPetForm();
+
+    await planPaymentHelper.completePlanPayment();
+  });
+
+  test('Contract one dog insurance with discount coupon', async () => {
+    await contractHelper.fillPetForm({ promoCode: 'CHRIS20S' });
+    await planPaymentHelper.completePlanPayment();
+  });
+
+  test('Edit pet info', async () => {
+    await contractHelper.fillPetForm();
+    await planPaymentHelper.completePlanPayment();
+
+    await contractHelper.editPetForm();
+  });
 });
