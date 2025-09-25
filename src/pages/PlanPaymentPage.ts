@@ -134,7 +134,7 @@ export class PlanPaymentPage {
 
     async fillPostalCode(postalCode: string) {
         await this.postalCodeInput.fill(postalCode);
-        await this.cityInput.isEditable();
+        await this.page.click('html');
     }
 
     async acceptTermsAndConditions() {
