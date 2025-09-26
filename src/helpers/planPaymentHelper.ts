@@ -30,6 +30,9 @@ export class PlanPaymentHelper {
         await planPaymentPage.fillPostalCode('28080');
         await planPaymentPage.clickContinue();
         await planPaymentPage.acceptTermsAndConditions();
-        await planPaymentPage.clickPay();
         }
+
+    async addPetToPlan() {
+        await this.planPaymentPage.clickAddPet();
+    }
 }

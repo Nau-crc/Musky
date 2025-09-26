@@ -45,7 +45,7 @@ export class ContractPage {
     this.raceDropdown = page.getByRole('textbox', { name: 'Su raza es:' });
   }
 
-  async calculateInsuranceCLick () {
+  async calculateInsuranceClick () {
     await this.calculateInsuranceButton.click();
   }
 
@@ -123,4 +123,5 @@ export class ContractPage {
   async editPetInfo() {
     await this.editPetInfoButton.click();
   }
+
 }

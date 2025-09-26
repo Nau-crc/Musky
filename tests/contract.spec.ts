@@ -4,10 +4,13 @@ import { ContractHelper } from '../src/helpers/contractHelper';
 import { ContractPage } from '../src/pages/ContractPage';
 import { PlanPaymentHelper } from '../src/helpers/planPaymentHelper';
 import { PlanPaymentPage } from '../src/pages/PlanPaymentPage';
+import { PaymentHelper } from '../src/helpers/paymentHelper';
+import { PaymentPage } from '../src/pages/PaymentPage';
 
 let welcomePage: WelcomePage;
 let contractHelper: ContractHelper;
 let planPaymentHelper: PlanPaymentHelper;
+let paymentHelper: PaymentHelper;
 
 test.describe('Pet insurance contracts', () => {
   test.beforeEach(async ({ page }) => {
@@ -19,6 +22,9 @@ test.describe('Pet insurance contracts', () => {
 
     const planPaymentPage = new PlanPaymentPage(page);
     planPaymentHelper = new PlanPaymentHelper(planPaymentPage);
+
+    const paymentPage = new PaymentPage(page);
+    paymentHelper = new PaymentHelper(paymentPage);
   });
 
   test.afterAll(async ({ page }) => {
@@ -26,29 +32,43 @@ test.describe('Pet insurance contracts', () => {
   });
 
   test('Single contract one dog insurance', async () => {
-    await contractHelper.fillPetForm();
+    await contractHelper.startContract();
+    await contractHelper.petInfoFiller({});
+    await contractHelper.contactInfoFiller({});
+    await contractHelper.finalSteps();
     await planPaymentHelper.completePlanPayment();
+    await paymentHelper.completePayment('4242424242424242', '12/30', '123', 'Chris Evans');
   });
 
   test('Contract two dogs insurance', async () => {
-    await contractHelper.fillPetForm();
+    await contractHelper.startContract();
+    await contractHelper.petInfoFiller({});
+    await planPaymentHelper.addPetToPlan();
+    await contractHelper.petInfoFiller({});
+    await contractHelper.contactInfoFiller({});
+    await contractHelper.promoCodeFiller({});
+    await contractHelper.finalSteps();
 
-    await welcomePage.addAnotherPet();
-
-    await contractHelper.fillPetForm();
 
     await planPaymentHelper.completePlanPayment();
   });
 
   test('Contract one dog insurance with discount coupon', async () => {
-    await contractHelper.fillPetForm({ promoCode: 'CHRIS20S' });
+    await contractHelper.startContract();
+    await contractHelper.petInfoFiller({});
+    await contractHelper.contactInfoFiller({});
+    await contractHelper.promoCodeFiller({});
     await planPaymentHelper.completePlanPayment();
   });
 
   test('Edit pet info', async () => {
-    await contractHelper.fillPetForm();
+    await contractHelper.startContract();
+    await contractHelper.petInfoFiller({});
+    await contractHelper.contactInfoFiller({});
+    await contractHelper.finalSteps();
     await planPaymentHelper.completePlanPayment();
+    await contractHelper.petInfoFiller({petName: 'Max'});
 
-    await contractHelper.editPetForm();
   });
+  
 });

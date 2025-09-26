@@ -24,7 +24,7 @@ export class PlanPaymentPage {
     private postalCodeInput: Locator;
     private cityInput: Locator;
     private termsAndConditionsCheck: Locator;
-    private payButton: Locator; 
+    private addPetButton: Locator;
 
     constructor(page: Page) {
         this.page = page;
@@ -51,7 +51,7 @@ export class PlanPaymentPage {
         this.postalCodeInput = page.locator('input[name="postal-code"]');
         this.cityInput = page.locator('div:nth-child(8) > .relative > #input')
         this.termsAndConditionsCheck = page.getByText('He leído y acepto la Póliza');
-        this.payButton = page.getByRole('button', { name: 'Pagar' });
+        this.addPetButton = page.getByRole('button', { name: 'Añadir otro peludo' });
     }
 
     async selectMonthlyPlan() {
@@ -141,7 +141,7 @@ export class PlanPaymentPage {
         await this.termsAndConditionsCheck.click();
     }
 
-    async clickPay() {
-        await this.payButton.click();
+    async clickAddPet() {
+        await this.addPetButton.click();
     }
 }
