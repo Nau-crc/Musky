@@ -21,6 +21,7 @@ export class ContractPage {
   private discountCodeMessage: Locator;
   private discountCodeErrorMessage: Locator;
   private raceDropdown: Locator;
+  private selectDog: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -28,6 +29,7 @@ export class ContractPage {
     this.calculateInsuranceButton = page.locator('section').filter({ hasText: 'El seguro veterinario que tu' }).getByRole('link');
     this.nameInput = page.getByRole('textbox', { name: 'Mi mascota se llama...' });
     this.speciesButton = page.locator('section').filter({ hasText: 'El seguro veterinario que tu' }).getByLabel('Perro');
+    this.selectDog = page.locator('label').filter({ hasText: 'Perro' });
     this.genderButton = page.getByText('Macho', { exact: true });
     this.birthDateInput = page.getByRole('textbox', { name: 'Fecha de nacimiento' });
     this.raceInput = page.getByRole('textbox', { name: 'Su raza es:' });
@@ -56,6 +58,10 @@ export class ContractPage {
 
   async selectSpecies() {
     await this.speciesButton.check();
+  }
+
+  async choosePetButton() {
+    await this.selectDog.click();
   }
 
   async clickContinue() {
@@ -120,7 +126,7 @@ export class ContractPage {
     await this.acceptTermsAndConditionscheck.check();
   }
 
-  async editPetInfo() {
+  async editInfo() {
     await this.editPetInfoButton.click();
   }
 

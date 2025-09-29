@@ -1,3 +1,4 @@
+import { expect } from 'playwright/test';
 import { PaymentPage } from '../pages/PaymentPage';
 
 export class PaymentHelper {
@@ -9,7 +10,18 @@ export class PaymentHelper {
         await paymentPage.clickPay();
         await paymentPage.selectCreditCardPayment();
         await paymentPage.selectCreditCardPayment();
-        await paymentPage.fillCardDetails('4242424242424242', '12/30', '123', 'Chris Evans');
-        await paymentPage.clickPay();
+        await paymentPage.fillCardDetails(cardNumber, expiry, cvc, cardHolderName);
+        await paymentPage.submitPayment();
+        
+    }
+
+    async verifyPaymentSuccess() {
+        const paymentPage = this.paymentPage;
+        return await paymentPage.verifyPaymentSuccess();
+    }
+
+    async verifyPaymentError() {
+        const paymentPage = this.paymentPage;
+        return await paymentPage.errorMessageVisible();
     }
 }

@@ -31,6 +31,7 @@ export class ContractHelper {
       race: race  ?? 'Akita Inu',};
 
       await contract.fillPetName(data.petName);
+      await contract.choosePetButton();
       await contract.clickContinue();
   
       await contract.selectGender();
@@ -77,10 +78,10 @@ export class ContractHelper {
     }
   
 
-  async editPetButton(){
+  async editButton(){
     const contract = this.contractPage;
 
-    await contract.editPetInfo();
+    await contract.editInfo();
   }
 
   }
